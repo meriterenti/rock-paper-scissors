@@ -23,18 +23,14 @@ const Welcome = ({ setUserSubmitted, setChangeUser }: WelcomeProps) => {
   };
 
   const updateSession = () => {
+    const userData = {
+      userName: nickName,
+      weapons: WEAPONS,
+      scores: {},
+    };
     const playersData = localStorage.getItem("rps_players");
     if (!playersData) {
-      localStorage.setItem(
-        "rps_players",
-        JSON.stringify([
-          {
-            userName: nickName,
-            weapons: WEAPONS,
-            scores: {},
-          },
-        ])
-      );
+      localStorage.setItem("rps_players", JSON.stringify([userData]));
     } else {
       const players = JSON.parse(playersData);
       const existingPlayer = players.find(
@@ -44,14 +40,7 @@ const Welcome = ({ setUserSubmitted, setChangeUser }: WelcomeProps) => {
       if (!existingPlayer) {
         localStorage.setItem(
           "rps_players",
-          JSON.stringify([
-            ...players,
-            {
-              userName: nickName,
-              weapons: WEAPONS,
-              scores: {},
-            },
-          ])
+          JSON.stringify([...players, userData])
         );
       }
     }
@@ -76,7 +65,7 @@ const Welcome = ({ setUserSubmitted, setChangeUser }: WelcomeProps) => {
   return (
     <>
       <div className={styles.wrapper}></div>
-      <div className={styles.container}>
+      <div className={styles.container} data-testid="welcomeContainer">
         <h2 className={styles.title}>
           Hey! <br /> Welcome to play Rock Paper Scissors game!
         </h2>
@@ -90,8 +79,12 @@ const Welcome = ({ setUserSubmitted, setChangeUser }: WelcomeProps) => {
             onChange={(e) => handleChange(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <button onClick={handleSave}>Go</button>
-          <span className={styles.error}>{error}</span>
+          <button data-testid="submit" onClick={handleSave}>
+            Go
+          </button>
+          <span data-testid="error" className={styles.error}>
+            {error}
+          </span>
         </div>
         <img
           className={styles.instruction}

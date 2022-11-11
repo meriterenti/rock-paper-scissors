@@ -27,7 +27,7 @@ const Stats = ({ playerScore, players }: StatsProps) => {
       <div className={styles.leaderBoardTitle}>
         <h2>Leaderboard</h2>
         <div className={styles.tooltip}>
-          <img src="images/info_icon.png" />
+          <img alt="info icon" src="images/info_icon.png" />
           <span className={styles.tooltiptext}>
             Score calculation is done as in football. 3 points for a win. 1
             point for a draw

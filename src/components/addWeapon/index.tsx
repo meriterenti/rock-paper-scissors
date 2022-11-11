@@ -17,21 +17,35 @@ const AddWeapon = ({ weapons, setWeapons }: AddWeaponProps) => {
   const [errors, setErrors] = useState<string[]>([]);
   const [selectedBeaters, setSelectedBeaters] = useState<BeaterIds>([]);
   const [selectedCrushers, setSelectedCrushers] = useState<CrusherIds>([]);
-  const [selectedImage, setSelectedImage] = useState<Blob | MediaSource>();
+  const [selectedImage, setSelectedImage] = useState<Blob>();
   const [weaponName, setWeaponName] = useState<string>("");
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
 
-  let successTimeout: NodeJS.Timeout;
-
   useEffect(() => {
+    let successTimeout: NodeJS.Timeout;
     if (showSuccess) {
       successTimeout = setTimeout(() => {
-        setShowSuccess(false);
-        setShowModal(false);
+        handleReset();
       }, 3000);
     }
     return () => clearTimeout(successTimeout);
   }, [showSuccess]);
+
+  const readUploadedFileAsBase64 = (inputFile: Blob): Promise<string> => {
+    const temporaryFileReader = new FileReader();
+
+    return new Promise((resolve, reject) => {
+      temporaryFileReader.readAsDataURL(inputFile);
+      temporaryFileReader.onerror = () => {
+        temporaryFileReader.abort();
+        reject(new DOMException("Problem parsing input file."));
+      };
+
+      temporaryFileReader.onload = () => {
+        resolve(temporaryFileReader.result as string);
+      };
+    });
+  };
 
   const handleReset = () => {
     setShowModal(false);
@@ -58,7 +72,7 @@ const AddWeapon = ({ weapons, setWeapons }: AddWeaponProps) => {
     method(tmpWeapons);
   };
 
-  const createWeapon = () => {
+  const createWeapon = async () => {
     const tmpErrors = [];
     if (!weaponName.length) {
       tmpErrors.push("Weapon name can't be empty");
@@ -69,18 +83,25 @@ const AddWeapon = ({ weapons, setWeapons }: AddWeaponProps) => {
     if (weapons.length !== selectedBeaters.length + selectedCrushers.length) {
       tmpErrors.push("The weapon should include all possible rules");
     }
+    let base64Img;
+    try {
+      if (selectedImage) {
+        base64Img = await readUploadedFileAsBase64(selectedImage!);
+      }
+    } catch (_) {
+      tmpErrors.push(
+        "Something went wrong while uploading the image. Please try again later"
+      );
+    }
 
     setErrors(tmpErrors);
 
     if (!tmpErrors.length) {
-      console.log(selectedImage);
       const newWeapon = {
         id: weaponName,
         beater_ids: selectedBeaters,
         crusher_ids: selectedCrushers,
-        src: selectedImage
-          ? URL.createObjectURL(selectedImage!)
-          : "images/weapon.png",
+        src: base64Img || "images/weapon.png",
       };
       const rpsPlayers: PlayerProps[] = JSON.parse(
         localStorage.getItem("rps_players")!
@@ -173,7 +194,8 @@ const AddWeapon = ({ weapons, setWeapons }: AddWeaponProps) => {
                     <label>
                       <h5>Weapon look</h5>
                       <img
-                        alt="not fount"
+                        className={styles.fileUploadContainerImage}
+                        alt="upload"
                         src={
                           selectedImage
                             ? URL.createObjectURL(selectedImage!)
@@ -182,7 +204,8 @@ const AddWeapon = ({ weapons, setWeapons }: AddWeaponProps) => {
                       />
                       <input
                         type="file"
-                        name="myImage"
+                        accept="image/*"
+                        className={styles.fileInput}
                         onChange={(event) => {
                           setSelectedImage(event?.target?.files?.[0]);
                         }}

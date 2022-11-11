@@ -90,11 +90,11 @@
           text-align: center;
 
           &.beats {
-            background: #0dc90d;
+            background: red;
           }
 
           &.crushes {
-            background: red;
+            background: #0dc90d;
           }
         }
 
@@ -124,9 +124,20 @@
     cursor: pointer;
   }
 
+  .fileUploadContainerImage {
+    cursor: pointer;
+  }
+
   .error {
     color: red;
     font-size: 12px;
     text-align: left;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .addBtn {
+    top: 64px;
+    left: 24px;
   }
 }

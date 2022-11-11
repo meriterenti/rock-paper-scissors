@@ -45,6 +45,7 @@ const Game = ({ setChangeUser }: GameProps) => {
   const currentWeapons =
     players.length > 0 && currentPlayer ? currentPlayer.weapons : WEAPONS;
 
+  const [statsVisible, setStatsVisible] = useState<boolean>(false);
   const [counter, setCounter] = useState<number>(3);
   const [result, setResult] = useState<Results>(emptyResult);
   const [weapons, setWeapons] = useState<WeaponProps[]>(currentWeapons);
@@ -65,14 +66,14 @@ const Game = ({ setChangeUser }: GameProps) => {
       }, 1000);
     }
 
-    // if (counter === 0 && !result.message) {
-    //   setResult(RESULTS["loses"]);
-    //   setPlayerScore((prevState) => ({
-    //     ...prevState,
-    //     loses: prevState.loses + 1,
-    //     total: prevState.total + 1,
-    //   }));
-    // }
+    if (counter === 0 && !result.message) {
+      setResult(RESULTS["loses"]);
+      setPlayerScore((prevState) => ({
+        ...prevState,
+        loses: prevState.loses + 1,
+        total: prevState.total + 1,
+      }));
+    }
 
     return () => {
       clearTimeout(timeOut);
@@ -98,7 +99,7 @@ const Game = ({ setChangeUser }: GameProps) => {
   }, [playerScore]);
 
   const handleWeaponSelect = (weapon: WeaponProps): void => {
-    const [myWeapon, result] = defineWinner(weapon);
+    const [myWeapon, result] = defineWinner(weapon, weapons);
     setUsersWeapon(weapon);
     setMyWeapon(myWeapon);
 
@@ -135,17 +136,21 @@ const Game = ({ setChangeUser }: GameProps) => {
           <div className={styles.results}>
             <h3>{result.message}</h3>
             <div className={styles.imgContainer}>
-              <img src={result.src} />
+              <img src={result.src} alt="weapon" />
             </div>
             {usersWeapon.id && (
               <div className={styles.competitors}>
                 <div className={styles.competitor}>
                   <span>You</span>
-                  <img src={usersWeapon.src} alt={usersWeapon.id} />
+                  <div className={styles.image}>
+                    <img src={usersWeapon.src} alt={usersWeapon.id} />
+                  </div>
                 </div>
                 <div className={styles.competitor}>
                   <span>Computer</span>
-                  <img src={myWeapon.src} alt={myWeapon.id} />
+                  <div className={styles.image}>
+                    <img src={myWeapon.src} alt={myWeapon.id} />
+                  </div>
                 </div>
               </div>
             )}
@@ -165,15 +170,7 @@ const Game = ({ setChangeUser }: GameProps) => {
                   onClick={() => handleWeaponSelect(weapon)}
                 >
                   <div className={styles.image}>
-                    <img
-                      src={
-                        // weapon.src.startsWith("blob")
-                        // ?
-                        // URL.createObjectURL(new File(weapon.src))
-                        weapon.src
-                      }
-                      alt={weapon.id}
-                    />
+                    <img src={weapon.src} alt={weapon.id} />
                   </div>
                   <span>{weapon.id}</span>
                 </div>
@@ -183,9 +180,23 @@ const Game = ({ setChangeUser }: GameProps) => {
         )}
         <AddWeapon weapons={weapons} setWeapons={setWeapons} />
       </div>
-      <div className={styles.scoreContainer}>
+      <div
+        className={`${styles.scoreContainer} ${
+          statsVisible ? styles.active : ""
+        }`}
+      >
         <Stats playerScore={playerScore} players={players} />
+        <span
+          className={styles.mobileCloseStats}
+          onClick={() => setStatsVisible(false)}
+        >
+          x
+        </span>
       </div>
+      <div
+        className={styles.mobileScors}
+        onClick={() => setStatsVisible(true)}
+      ></div>
     </div>
   );
 };

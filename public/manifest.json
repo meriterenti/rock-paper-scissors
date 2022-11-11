@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Rock x Paper x Scissors Game",
+  "name": "Our beloved Rock Paper Scissors game",
   "icons": [
     {
       "src": "favicon.ico",

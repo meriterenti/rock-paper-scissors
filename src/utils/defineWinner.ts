@@ -1,11 +1,11 @@
 import { WeaponProps, Results } from "../components/game/game.interface.js";
-import { WEAPONS, RESULTS } from "../constants.js";
+import { RESULTS } from "../constants.js";
 
-const getRandomWeapon = () =>
-  WEAPONS[Math.floor(Math.random() * WEAPONS.length)];
-
-const defineWinner = (usersWeapon: WeaponProps): [WeaponProps, Results] => {
-  const myWeapon = getRandomWeapon();
+const defineWinner = (
+  usersWeapon: WeaponProps,
+  weapons: WeaponProps[]
+): [WeaponProps, Results] => {
+  const myWeapon = weapons[Math.floor(Math.random() * weapons.length)];
 
   if (usersWeapon.crusher_ids.includes(myWeapon.id)) {
     return [myWeapon, RESULTS["wins"]];
