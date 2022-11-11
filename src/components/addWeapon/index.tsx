@@ -89,84 +89,105 @@ const AddWeapon = () => {
 
   return (
     <>
-      <button onClick={() => setShowModal(true)}>Add a new weapon</button>
+      <button className={styles.addBtn} onClick={() => setShowModal(true)}>
+        + Add a new weapon
+      </button>
       {!!showModal && (
         <>
           <div onClick={handleReset} className={styles.weaponModalBackground} />
           <div className={styles.weaponModalWrapper}>
             {showSuccess ? (
-              <p>Weaopon successfully added</p>
+              <h3>Weaopon successfully added</h3>
             ) : (
               <>
-                <label>
-                  New weapon name:
-                  <input
-                    type="text"
-                    onChange={(e) => setWeaponName(e.target.value)}
-                    value={weaponName}
-                  />
-                </label>
-                <label>
-                  New weapon beats:
-                  {WEAPONS.map((weapon) => (
-                    <label key={weapon.id}>
-                      {weapon.id}
+                <h3>Add new weapon</h3>
+                <span onClick={handleReset} className={styles.reset}>
+                  x
+                </span>
+                <div className={styles.content}>
+                  <div>
+                    <label>
+                      Weapon name:
                       <input
-                        type="checkbox"
-                        value={weapon.id}
-                        onClick={() =>
-                          handleRules(
-                            weapon.id,
-                            selectedBeaters,
-                            setSelectedBeaters
-                          )
-                        }
-                        disabled={selectedCrushers.includes(weapon.id)}
+                        type="text"
+                        onChange={(e) => setWeaponName(e.target.value)}
+                        value={weaponName}
                       />
                     </label>
-                  ))}
-                </label>
-                <label>
-                  New weapon crushes:
-                  {WEAPONS.map((weapon) => (
-                    <label key={weapon.id}>
-                      {weapon.id}
-                      <input
-                        type="checkbox"
-                        value={weapon.id}
-                        onClick={() =>
-                          handleRules(
-                            weapon.id,
-                            selectedCrushers,
-                            setSelectedCrushers
-                          )
+                  </div>
+                  <h5>Actions</h5>
+                  <div className={styles.actions}>
+                    <div className={styles.action}>
+                      <span className={styles.beats}>Beats</span>
+                      {WEAPONS.map((weapon) => (
+                        <label className={styles.weapon} key={weapon.id}>
+                          {weapon.id}
+                          <input
+                            type="checkbox"
+                            value={weapon.id}
+                            onClick={() =>
+                              handleRules(
+                                weapon.id,
+                                selectedBeaters,
+                                setSelectedBeaters
+                              )
+                            }
+                            disabled={selectedCrushers.includes(weapon.id)}
+                          />
+                        </label>
+                      ))}
+                    </div>
+                    <div className={styles.action}>
+                      <span className={styles.crushes}>Crushes</span>
+                      {WEAPONS.map((weapon) => (
+                        <label className={styles.weapon} key={weapon.id}>
+                          {weapon.id}
+                          <input
+                            type="checkbox"
+                            value={weapon.id}
+                            onClick={() =>
+                              handleRules(
+                                weapon.id,
+                                selectedCrushers,
+                                setSelectedCrushers
+                              )
+                            }
+                            disabled={selectedBeaters.includes(weapon.id)}
+                          />
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={styles.look}>
+                    <label>
+                      <h5>Weapon look</h5>
+                      <img
+                        alt="not fount"
+                        src={
+                          selectedImage
+                            ? URL.createObjectURL(selectedImage!)
+                            : "images/weapon.png"
                         }
-                        disabled={selectedBeaters.includes(weapon.id)}
+                      />
+                      <input
+                        type="file"
+                        name="myImage"
+                        onChange={(event) => {
+                          setSelectedImage(event?.target?.files?.[0]);
+                        }}
                       />
                     </label>
-                  ))}
-                </label>
-                <label>
-                  New weapon look:
-                  <img
-                    alt="not fount"
-                    src={
-                      selectedImage
-                        ? URL.createObjectURL(selectedImage!)
-                        : "images/draw.png"
-                    }
-                  />
-                  <input
-                    type="file"
-                    name="myImage"
-                    onChange={(event) => {
-                      setSelectedImage(event?.target?.files?.[0]);
-                    }}
-                  />
-                </label>
-                <button onClick={createWeapon}>Create The Weapon</button>
+                  </div>
+                </div>
                 {!!errors.length &&
-                  errors.map((error) => <p key={error}>{error}</p>)}
+                  errors.map((error) => (
+                    <p className={styles.error} key={error}>
+                      {error}
+                    </p>
+                  ))}
+                <button className={styles.createBtn} onClick={createWeapon}>
+                  Create the weapon
+                </button>
               </>
             )}
           </div>
