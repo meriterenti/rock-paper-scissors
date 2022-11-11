@@ -1,0 +1,15 @@
+.weaponModalWrapper {
+    position: absolute;
+    z-index: 9999;
+    background-color: white;
+    padding: 24px;
+}
+.weaponModalBackground {
+    position: absolute;
+    z-index: 9998;
+    background: rgba(256, 256, 256, 0.5);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}

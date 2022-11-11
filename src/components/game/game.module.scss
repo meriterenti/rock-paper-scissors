@@ -1,0 +1,119 @@
+.wrapper {
+  display: flex;
+  height: 100vh;
+  text-align: center;
+
+  .gameContainer {
+    flex-basis: 75%;
+    padding: 140px 40px;
+    background: #ffc800;
+
+    .changeUserBtn {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      padding: 10px 24px;
+      border: 1px solid red;
+      border-radius: 108px;
+      background: transparent;
+      color: red;
+      font-size: 16px;
+      outline: 0;
+      cursor: pointer;
+    }
+
+    .counter {
+      margin: 16px;
+      font-size: 72px;
+      font-weight: bold;
+      color: #0dd00d;
+    }
+
+    .title {
+      color: #5d5e5d;
+    }
+
+    .weapons {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      max-width: 650px;
+      margin: 0 auto;
+
+      .weapon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100px;
+        margin: 16px;
+        padding: 16px;
+        cursor: pointer;
+
+        img {
+          margin-bottom: 16px;
+        }
+
+        span {
+          font-weight: bold;
+        }
+      }
+    }
+
+    .results {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 32px;
+
+      .imgContainer {
+        display: flex;
+        justify-content: center;
+        width: 220px;
+        height: 220px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        overflow: hidden;
+
+        img {
+          width: 250px;
+        }
+      }
+
+      .competitors {
+        display: flex;
+
+        .competitor {
+          display: flex;
+          flex-direction: column;
+          margin: 42px;
+
+          span {
+            font-weight: bold;
+            margin-bottom: 16px;
+          }
+        }
+      }
+
+      .resetBtn {
+        display: inline-block;
+        width: 200px;
+        margin-top: 42px;
+        padding: 10px 16px;
+        border: 0;
+        border-radius: 108px;
+        background: #00aabe;
+        color: #eee;
+        font-size: 16px;
+        outline: 0;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .scoreContainer {
+    flex-basis: 25%;
+    padding: 20px 40px;
+    background: #00aabe;
+  }
+}
