@@ -62,4 +62,18 @@
     margin-top: 112px;
     filter: invert(1) brightness(0.5);
   }
+
+  @media only screen and (max-width: 768px) {
+    p {
+      margin: 16px 24px;
+    }
+
+    input {
+      margin-right: 0;
+    }
+
+    button {
+      margin-top: 24px;
+    }
+  }
 }

@@ -1,9 +1,18 @@
-import { useEffect, useState } from "react";
-import { WEAPONS } from "../../constants";
-import { BeaterIds, CrusherIds, PlayerProps } from "../game/game.interface";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
+import {
+  BeaterIds,
+  CrusherIds,
+  PlayerProps,
+  WeaponProps,
+} from "../game/game.interface";
 import styles from "./addWeapon.module.scss";
 
-const AddWeapon = () => {
+type AddWeaponProps = {
+  weapons: WeaponProps[];
+  setWeapons: Dispatch<SetStateAction<WeaponProps[]>>;
+};
+
+const AddWeapon = ({ weapons, setWeapons }: AddWeaponProps) => {
   const [showModal, setShowModal] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
   const [selectedBeaters, setSelectedBeaters] = useState<BeaterIds>([]);
@@ -37,7 +46,7 @@ const AddWeapon = () => {
   const handleRules = (
     weaponId: string,
     currentWeapons: string[],
-    method: React.Dispatch<React.SetStateAction<string[]>>
+    method: Dispatch<SetStateAction<string[]>>
   ) => {
     const tmpWeapons = [...currentWeapons];
     const index = tmpWeapons.indexOf(weaponId);
@@ -54,23 +63,24 @@ const AddWeapon = () => {
     if (!weaponName.length) {
       tmpErrors.push("Weapon name can't be empty");
     }
-    if (WEAPONS.find((weapon) => weapon.id === weaponName)) {
+    if (weapons.find((weapon) => weapon.id === weaponName)) {
       tmpErrors.push("Weapon name already exists");
     }
-    if (WEAPONS.length !== selectedBeaters.length + selectedCrushers.length) {
+    if (weapons.length !== selectedBeaters.length + selectedCrushers.length) {
       tmpErrors.push("The weapon should include all possible rules");
     }
 
     setErrors(tmpErrors);
 
     if (!tmpErrors.length) {
+      console.log(selectedImage);
       const newWeapon = {
         id: weaponName,
         beater_ids: selectedBeaters,
         crusher_ids: selectedCrushers,
         src: selectedImage
           ? URL.createObjectURL(selectedImage!)
-          : "images/draw.png",
+          : "images/weapon.png",
       };
       const rpsPlayers: PlayerProps[] = JSON.parse(
         localStorage.getItem("rps_players")!
@@ -84,6 +94,7 @@ const AddWeapon = () => {
       });
       localStorage.setItem("rps_players", JSON.stringify(tmpRpsPlayers));
       setShowSuccess(true);
+      setWeapons((prevState) => [...prevState, newWeapon]);
     }
   };
 
@@ -119,7 +130,7 @@ const AddWeapon = () => {
                   <div className={styles.actions}>
                     <div className={styles.action}>
                       <span className={styles.beats}>Beats</span>
-                      {WEAPONS.map((weapon) => (
+                      {weapons.map((weapon) => (
                         <label className={styles.weapon} key={weapon.id}>
                           {weapon.id}
                           <input
@@ -139,7 +150,7 @@ const AddWeapon = () => {
                     </div>
                     <div className={styles.action}>
                       <span className={styles.crushes}>Crushes</span>
-                      {WEAPONS.map((weapon) => (
+                      {weapons.map((weapon) => (
                         <label className={styles.weapon} key={weapon.id}>
                           {weapon.id}
                           <input

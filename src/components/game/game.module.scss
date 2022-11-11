@@ -37,6 +37,7 @@
     .weapons {
       display: flex;
       justify-content: space-around;
+      flex-wrap: wrap;
       width: 100%;
       max-width: 650px;
       margin: 0 auto;
@@ -50,8 +51,16 @@
         padding: 16px;
         cursor: pointer;
 
-        img {
-          margin-bottom: 16px;
+        .image {
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          overflow: hidden;
+
+          img {
+            max-width: 102%;
+            margin-bottom: 16px;
+          }
         }
 
         span {
@@ -116,5 +125,36 @@
     flex-basis: 25%;
     padding: 20px 40px;
     background: #00aabe;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .wrapper {
+    height: 100%;
+    min-height: 100vh;
+
+    .scoreContainer {
+      display: none;
+    }
+
+    .gameContainer {
+      flex-basis: 100%;
+      max-width: 100%;
+      padding: 100px 24px;
+
+      .results {
+        max-width: 100%;
+
+        .competitors {
+          .competitor {
+            margin: 36px 12px;
+
+            img {
+              max-width: 120px;
+            }
+          }
+        }
+      }
+    }
   }
 }
